@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, RotateCcw } from "lucide-react";
+import { ChevronLeft, ChevronRight, EyeOff, Maximize2, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function SlideNav({
@@ -9,12 +9,16 @@ export function SlideNav({
   onPrev,
   onNext,
   onRestart,
+  onFullscreen,
+  onHideControls,
 }: {
   current: number;
   total: number;
   onPrev: () => void;
   onNext: () => void;
   onRestart: () => void;
+  onFullscreen: () => void;
+  onHideControls: () => void;
 }) {
   const isFirst = current === 0;
   const isLast = current === total - 1;
@@ -32,7 +36,7 @@ export function SlideNav({
           <ChevronLeft className="size-4" />
           <span className="hidden sm:inline">Previous</span>
         </Button>
-        <div className="flex min-w-0 items-center justify-center gap-2 sm:gap-4">
+        <div className="flex min-w-0 items-center justify-center gap-1 sm:gap-2 md:gap-4">
           <span className="truncate text-xs text-[#8fb9d8] sm:text-sm">
             Slide {current + 1} / {total}
           </span>
@@ -45,6 +49,24 @@ export function SlideNav({
           >
             <RotateCcw className="size-4" />
             <span className="hidden sm:inline">Restart</span>
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onFullscreen}
+            aria-label="Fullscreen"
+            className="shrink-0 text-[#8fb9d8] hover:bg-[#15325c] hover:text-white"
+          >
+            <Maximize2 className="size-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onHideControls}
+            aria-label="Hide controls"
+            className="shrink-0 text-[#8fb9d8] hover:bg-[#15325c] hover:text-white"
+          >
+            <EyeOff className="size-4" />
           </Button>
         </div>
         <Button

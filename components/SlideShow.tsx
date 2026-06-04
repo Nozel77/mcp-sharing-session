@@ -2,8 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { Eye } from "lucide-react";
 import { ProgressDots } from "@/components/ProgressDots";
 import { SlideNav } from "@/components/SlideNav";
+import { Button } from "@/components/ui/button";
 import { SLIDES } from "@/data/slides";
 import type { RemoteSnapshot } from "@/lib/remote/types";
 
@@ -17,6 +19,9 @@ async function syncSlide(slide: number, total: number) {
 
 export function SlideShow() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [controlsHidden, setControlsHidden] = useState(() =>
+    typeof window === "undefined" ? false : localStorage.getItem("mcpDesktopControlsHidden") === "true",
+  );
   const total = SLIDES.length;
   const slideRef = useRef(currentSlide);
 
@@ -44,6 +49,25 @@ export function SlideShow() {
   const restart = useCallback(() => {
     setSlide(0);
   }, [setSlide]);
+
+  const toggleFullscreen = useCallback(() => {
+    if (document.fullscreenElement) {
+      void document.exitFullscreen();
+      return;
+    }
+
+    void document.documentElement.requestFullscreen?.();
+  }, []);
+
+  const hideControls = useCallback(() => {
+    localStorage.setItem("mcpDesktopControlsHidden", "true");
+    setControlsHidden(true);
+  }, []);
+
+  const showControls = useCallback(() => {
+    localStorage.setItem("mcpDesktopControlsHidden", "false");
+    setControlsHidden(false);
+  }, []);
 
   useEffect(() => {
     slideRef.current = currentSlide;
@@ -91,7 +115,26 @@ export function SlideShow() {
           <ActiveSlide />
         </motion.div>
       </AnimatePresence>
-      <SlideNav current={currentSlide} total={total} onPrev={goPrev} onNext={goNext} onRestart={restart} />
+      {controlsHidden ? (
+        <Button
+          size="icon"
+          onClick={showControls}
+          aria-label="Show controls"
+          className="fixed bottom-4 right-4 z-50 border border-[#234879] bg-[#10213d]/90 text-[#C4E2F5] shadow-lg shadow-black/30 hover:bg-[#15325c]"
+        >
+          <Eye className="size-4" />
+        </Button>
+      ) : (
+        <SlideNav
+          current={currentSlide}
+          total={total}
+          onPrev={goPrev}
+          onNext={goNext}
+          onRestart={restart}
+          onFullscreen={toggleFullscreen}
+          onHideControls={hideControls}
+        />
+      )}
     </main>
   );
 }
