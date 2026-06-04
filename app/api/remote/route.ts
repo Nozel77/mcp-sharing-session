@@ -8,7 +8,7 @@ type RemoteState = {
   currentSlide: number;
   total: number;
   devices: Map<string, RemoteDevice>;
-  clients: Set<WritableStreamDefaultWriter<Uint8Array>>;
+  clients: Set<ReadableStreamDefaultController<Uint8Array>>;
   updatedAt: number;
 };
 
@@ -47,8 +47,8 @@ function clampSlide(value: number, total: number) {
   return Math.max(0, Math.min(Math.trunc(value), Math.max(0, total - 1)));
 }
 
-async function send(writer: WritableStreamDefaultWriter<Uint8Array>, data: RemoteSnapshot) {
-  await writer.write(encoder.encode(`event: state\ndata: ${JSON.stringify(data)}\n\n`));
+function send(controller: ReadableStreamDefaultController<Uint8Array>, data: RemoteSnapshot) {
+  controller.enqueue(encoder.encode(`event: state\ndata: ${JSON.stringify(data)}\n\n`));
 }
 
 function broadcast() {
@@ -56,10 +56,12 @@ function broadcast() {
   state.updatedAt = Date.now();
   const data = snapshot(state);
 
-  for (const writer of state.clients) {
-    send(writer, data).catch(() => {
-      state.clients.delete(writer);
-    });
+  for (const controller of state.clients) {
+    try {
+      send(controller, data);
+    } catch {
+      state.clients.delete(controller);
+    }
   }
 }
 
@@ -67,23 +69,39 @@ function json(data: unknown, status = 200) {
   return Response.json(data, { status });
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   const state = getState();
-  const stream = new TransformStream<Uint8Array>();
-  const writer = stream.writable.getWriter();
+  const url = new URL(request.url);
 
-  state.clients.add(writer);
-  await writer.write(encoder.encode(": connected\n\n"));
-  await send(writer, snapshot(state));
+  if (url.searchParams.get("format") === "json") {
+    return json(snapshot(state));
+  }
 
-  const heartbeat = setInterval(() => {
-    writer.write(encoder.encode(": heartbeat\n\n")).catch(() => {
+  let heartbeat: ReturnType<typeof setInterval>;
+  let activeController: ReadableStreamDefaultController<Uint8Array> | null = null;
+  const stream = new ReadableStream<Uint8Array>({
+    start(controller) {
+      activeController = controller;
+      state.clients.add(controller);
+      controller.enqueue(encoder.encode(": connected\n\n"));
+      send(controller, snapshot(state));
+
+      heartbeat = setInterval(() => {
+        try {
+          controller.enqueue(encoder.encode(": heartbeat\n\n"));
+        } catch {
+          clearInterval(heartbeat);
+          state.clients.delete(controller);
+        }
+      }, 15000);
+    },
+    cancel() {
       clearInterval(heartbeat);
-      state.clients.delete(writer);
-    });
-  }, 15000);
+      if (activeController) state.clients.delete(activeController);
+    },
+  });
 
-  return new Response(stream.readable, {
+  return new Response(stream, {
     headers: {
       "Cache-Control": "no-cache, no-transform",
       Connection: "keep-alive",
@@ -164,4 +182,3 @@ export async function POST(request: Request) {
 
   return json({ error: "Action tidak dikenal." }, 400);
 }
-

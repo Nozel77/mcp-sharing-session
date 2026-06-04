@@ -18,6 +18,11 @@ export function RemotePairingPanel() {
   const [snapshot, setSnapshot] = useState<RemoteSnapshot | null>(null);
 
   useEffect(() => {
+    fetch("/api/remote?format=json")
+      .then((response) => response.json())
+      .then((data: RemoteSnapshot) => setSnapshot(data))
+      .catch(() => {});
+
     const events = new EventSource("/api/remote");
     events.addEventListener("state", (event) => {
       setSnapshot(JSON.parse((event as MessageEvent).data));
@@ -86,4 +91,3 @@ export function RemotePairingPanel() {
     </aside>
   );
 }
-
