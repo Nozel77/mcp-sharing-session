@@ -9,8 +9,8 @@ export type McpTableRow = {
 
 export function McpTable({ rows, prompt }: { rows: McpTableRow[]; prompt?: string }) {
   return (
-    <div>
-      <div className="overflow-x-auto rounded-xl border border-[#234879] shadow-[0_18px_60px_rgba(3,12,28,0.28)]">
+    <div className="min-w-0 max-w-full">
+      <div className="max-w-full overflow-x-auto rounded-xl border border-[#234879] shadow-[0_18px_60px_rgba(3,12,28,0.28)] [touch-action:pan-x]">
         <table className="w-full min-w-[680px] border-collapse text-left">
           <thead>
             <tr className="bg-gradient-to-r from-[#2C5EAD]/55 via-[#1591DC]/35 to-[#4BB8FA]/25 text-[10px] uppercase tracking-widest text-[#C4E2F5]">
@@ -40,7 +40,7 @@ export function McpTable({ rows, prompt }: { rows: McpTableRow[]; prompt?: strin
         </table>
       </div>
       {prompt ? (
-        <blockquote className="mt-4 rounded-r-lg border-l-2 border-[#4BB8FA] bg-gradient-to-r from-[#2C5EAD]/28 to-[#1591DC]/12 px-4 py-3 text-xs italic text-[#C4E2F5]">
+        <blockquote className="mt-4 rounded-r-lg border-l-2 border-[#4BB8FA] bg-gradient-to-r from-[#2C5EAD]/28 to-[#1591DC]/12 px-4 py-3 text-xs italic leading-relaxed text-[#C4E2F5]">
           {prompt}
         </blockquote>
       ) : null}

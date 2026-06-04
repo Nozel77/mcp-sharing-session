@@ -12,7 +12,7 @@ export default function Slide04TriedMCP() {
         plain="Pernah Aku Coba"
         subtitle="Contoh server MCP yang sudah terasa berguna untuk workflow harian"
       />
-      <div className="grid gap-6 lg:grid-cols-[1.7fr_1fr]">
+      <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)]">
         <McpTable
           rows={[
             {
@@ -48,7 +48,7 @@ export default function Slide04TriedMCP() {
           ]}
           prompt="Contoh: Pakai Context7 untuk cek dokumentasi terbaru, baca kontrak OpenAPI, lalu cocokkan implementasi endpoint di GitHub dengan data contoh dari MongoDB."
         />
-        <div className="space-y-4">
+        <div className="min-w-0 space-y-4">
           <InfoCard
             icon={<Frame className="size-5" />}
             title="Figma MCP"
