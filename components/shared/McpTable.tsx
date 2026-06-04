@@ -10,8 +10,8 @@ export type McpTableRow = {
 export function McpTable({ rows, prompt }: { rows: McpTableRow[]; prompt?: string }) {
   return (
     <div>
-      <div className="overflow-hidden rounded-xl border border-[#234879] shadow-[0_18px_60px_rgba(3,12,28,0.28)]">
-        <table className="w-full border-collapse text-left">
+      <div className="overflow-x-auto rounded-xl border border-[#234879] shadow-[0_18px_60px_rgba(3,12,28,0.28)]">
+        <table className="w-full min-w-[680px] border-collapse text-left">
           <thead>
             <tr className="bg-gradient-to-r from-[#2C5EAD]/55 via-[#1591DC]/35 to-[#4BB8FA]/25 text-[10px] uppercase tracking-widest text-[#C4E2F5]">
               <th className="px-4 py-3 font-semibold">MCP Server</th>

@@ -66,8 +66,8 @@ export default function Slide07GetStarted() {
           ),
         )}
       </div>
-      <div className="mx-auto mt-7 max-w-3xl rounded-2xl border border-[#4BB8FA]/40 bg-gradient-to-r from-[#2C5EAD]/35 via-[#1591DC]/20 to-[#4BB8FA]/12 px-8 py-5 text-center shadow-[0_0_38px_rgba(75,184,250,0.16)]">
-        <p className="text-lg font-semibold italic leading-relaxed text-[#F5FBFF] md:text-xl">
+      <div className="mx-auto mt-7 max-w-3xl rounded-xl border border-[#4BB8FA]/40 bg-gradient-to-r from-[#2C5EAD]/35 via-[#1591DC]/20 to-[#4BB8FA]/12 px-4 py-5 text-center shadow-[0_0_38px_rgba(75,184,250,0.16)] sm:px-6 md:px-8">
+        <p className="text-base font-semibold italic leading-relaxed text-[#F5FBFF] md:text-xl">
           &quot;AI terbaik bukan yang paling pintar, tapi yang paling terhubung dengan konteks kerja nyata kamu.&quot;
         </p>
       </div>

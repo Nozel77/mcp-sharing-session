@@ -19,7 +19,7 @@ export default function Slide05McpSkills() {
       />
       <div className="grid gap-6 lg:grid-cols-[1.05fr_1fr]">
         <div className="space-y-4">
-          <div className="deck-surface rounded-xl border border-[#234879] p-6">
+          <div className="deck-surface rounded-xl border border-[#234879] p-4 sm:p-6">
             <div className="mb-5 flex items-center gap-3">
               <div className="flex size-11 items-center justify-center rounded-lg bg-[#1591DC]/18 text-[#4BB8FA] ring-1 ring-[#4BB8FA]/35">
                 <Cable className="size-5" />

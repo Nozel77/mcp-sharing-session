@@ -8,7 +8,7 @@ export function BeforeAfterPanel({
   saving: string;
 }) {
   return (
-    <div className="deck-surface rounded-xl border border-[#234879] p-5">
+    <div className="deck-surface rounded-xl border border-[#234879] p-4 sm:p-5">
       <div className="grid gap-4 md:grid-cols-2">
         <ScenarioColumn accent="text-[#8fb9d8]" title={`Tanpa MCP - ${before.time}`} mark="x" steps={before.steps} />
         <ScenarioColumn accent="text-[#4BB8FA]" title={`Dengan MCP - ${after.time}`} mark="check" steps={after.steps} />

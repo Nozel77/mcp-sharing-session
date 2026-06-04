@@ -37,7 +37,7 @@ function Tabs({
 }
 
 function TabsList({ className, ...props }: React.ComponentProps<"div">) {
-  return <div className={cn("inline-flex items-center rounded-lg bg-[#0b1b33] p-1", className)} {...props} />;
+  return <div className={cn("inline-flex flex-wrap items-center justify-center rounded-lg bg-[#0b1b33] p-1", className)} {...props} />;
 }
 
 function TabsTrigger({ value, className, ...props }: React.ComponentProps<"button"> & { value: string }) {
@@ -48,7 +48,7 @@ function TabsTrigger({ value, className, ...props }: React.ComponentProps<"butto
     <button
       type="button"
       className={cn(
-        "rounded-md px-4 py-1.5 text-xs font-semibold text-[#8fb9d8] transition-colors",
+        "rounded-md px-3 py-1.5 text-xs font-semibold text-[#8fb9d8] transition-colors sm:px-4",
         active && "bg-[#1591DC]/25 text-white shadow-sm",
         className,
       )}

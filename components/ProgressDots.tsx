@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 export function ProgressDots({ total, current }: { total: number; current: number }) {
   return (
-    <div className="fixed left-6 top-1/2 z-30 flex -translate-y-1/2 flex-col items-center gap-2">
+    <div className="fixed left-1/2 top-3 z-30 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-[#234879]/70 bg-[#07101f]/75 px-2.5 py-1.5 backdrop-blur-md md:left-6 md:top-1/2 md:-translate-x-0 md:-translate-y-1/2 md:flex-col md:gap-2 md:border-0 md:bg-transparent md:p-0 md:backdrop-blur-none">
       {Array.from({ length: total }, (_, index) => (
         <span
           key={index}

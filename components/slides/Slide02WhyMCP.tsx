@@ -22,7 +22,7 @@ export default function Slide02WhyMCP() {
         <CapabilityCard tone="red" title="Sebelum MCP" subtitle="AI hanya bisa membantu dari teks yang kamu ketik" />
         <CapabilityCard tone="green" title="Dengan MCP" subtitle="AI bekerja langsung di sistem yang kamu pakai" />
       </div>
-      <div className="mx-auto mt-8 max-w-4xl rounded-xl border border-purple-800/30 bg-gradient-to-r from-purple-950 to-blue-950 px-6 py-4 text-center text-sm text-[#c4b5fd]">
+      <div className="mx-auto mt-6 max-w-4xl rounded-xl border border-purple-800/30 bg-gradient-to-r from-purple-950 to-blue-950 px-4 py-4 text-center text-sm text-[#c4b5fd] md:mt-8 md:px-6">
         MCP mengubah AI dari sekadar chatbot menjadi asisten kerja yang aktif dan terhubung.
       </div>
     </SlideWrapper>
@@ -33,7 +33,7 @@ function CapabilityCard({ tone, title, subtitle }: { tone: "red" | "green"; titl
   const positive = tone === "green";
 
   return (
-    <div className={`rounded-xl border p-6 ${positive ? "border-green-900/50 bg-green-950/10" : "border-red-900/50 bg-red-950/10"}`}>
+    <div className={`rounded-xl border p-4 sm:p-6 ${positive ? "border-green-900/50 bg-green-950/10" : "border-red-900/50 bg-red-950/10"}`}>
       <h2 className={`text-xl font-semibold ${positive ? "text-green-400" : "text-red-400"}`}>
         {positive ? "✓" : "x"} {title}
       </h2>

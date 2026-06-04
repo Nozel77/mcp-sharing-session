@@ -55,7 +55,7 @@ export default function Slide05UseCases() {
       />
       <div className="grid gap-4 md:grid-cols-2">
         {workflows.map((workflow) => (
-          <article key={workflow.title} className="deck-surface rounded-xl border border-[#234879] p-5">
+          <article key={workflow.title} className="deck-surface rounded-xl border border-[#234879] p-4 sm:p-5">
             <h2 className={`text-sm font-semibold ${workflow.accent}`}>{workflow.title}</h2>
             <ol className="mt-5 space-y-3">
               {workflow.steps.map((step, index) => (

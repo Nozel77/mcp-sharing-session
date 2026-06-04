@@ -55,8 +55,8 @@ export default function Slide06BeforeAfter() {
           </TabsContent>
         ))}
       </Tabs>
-      <div className="mx-auto mt-5 max-w-5xl overflow-hidden rounded-xl">
-        <table className="w-full text-left text-xs">
+      <div className="mx-auto mt-5 max-w-5xl overflow-x-auto rounded-xl">
+        <table className="w-full min-w-[520px] text-left text-xs">
           <thead className="bg-[#0b1b33] text-[#8fb9d8]">
             <tr>
               {["Role", "Before", "After", "Hemat"].map((header) => (
@@ -78,7 +78,7 @@ export default function Slide06BeforeAfter() {
             ))}
           </tbody>
         </table>
-        <div className="bg-[#0b1b33] px-4 py-3 text-center text-xs font-semibold text-[#4BB8FA]">
+        <div className="min-w-[520px] bg-[#0b1b33] px-4 py-3 text-center text-xs font-semibold text-[#4BB8FA]">
           Rata-rata engineer menghemat 2-4 jam kerja per hari
         </div>
       </div>

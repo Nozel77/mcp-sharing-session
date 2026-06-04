@@ -13,7 +13,7 @@ export default function Slide01WhatIsMCP() {
       />
       <div className="grid gap-6 lg:grid-cols-[3fr_2fr]">
         <div className="space-y-5">
-          <div className="deck-surface rounded-xl border border-[#234879] p-6 text-sm leading-7 text-[#C4E2F5]">
+          <div className="deck-surface rounded-xl border border-[#234879] p-4 text-sm leading-7 text-[#C4E2F5] sm:p-6">
             <span className="font-semibold text-white">Model Context Protocol (MCP)</span> adalah protokol terbuka
             yang dikembangkan oleh Anthropic pada akhir 2024. MCP menjadi standar universal yang memungkinkan AI untuk
             terhubung langsung ke tools, data, dan layanan eksternal - secara aman dan terstruktur.
