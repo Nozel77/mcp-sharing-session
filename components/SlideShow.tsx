@@ -7,6 +7,7 @@ import { ProgressDots } from "@/components/ProgressDots";
 import { SlideNav } from "@/components/SlideNav";
 import { Button } from "@/components/ui/button";
 import { SLIDES } from "@/data/slides";
+import { REMOTE_PAIRING_CODE } from "@/lib/remote/config";
 import type { RemoteSnapshot } from "@/lib/remote/types";
 
 async function syncSlide(slide: number, total: number) {
@@ -19,6 +20,11 @@ async function syncSlide(slide: number, total: number) {
 
 export function SlideShow() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPresenter] = useState(() => {
+    if (typeof window === "undefined") return false;
+
+    return new URLSearchParams(window.location.search).get("presenter") === REMOTE_PAIRING_CODE;
+  });
   const [controlsHidden, setControlsHidden] = useState(() =>
     typeof window === "undefined" ? false : localStorage.getItem("mcpDesktopControlsHidden") === "true",
   );
@@ -32,10 +38,10 @@ export function SlideShow() {
       setCurrentSlide(clamped);
 
       if (shouldSync) {
-        void syncSlide(clamped, total);
+        if (isPresenter) void syncSlide(clamped, total);
       }
     },
-    [total],
+    [isPresenter, total],
   );
 
   const goNext = useCallback(() => {
@@ -74,6 +80,8 @@ export function SlideShow() {
   }, [currentSlide]);
 
   useEffect(() => {
+    if (!isPresenter) return;
+
     void syncSlide(slideRef.current, total);
 
     const events = new EventSource("/api/remote");
@@ -87,7 +95,7 @@ export function SlideShow() {
     });
 
     return () => events.close();
-  }, [setSlide, total]);
+  }, [isPresenter, setSlide, total]);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {

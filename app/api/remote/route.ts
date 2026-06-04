@@ -1,4 +1,5 @@
 import type { RemoteDevice, RemoteSnapshot } from "@/lib/remote/types";
+import { REMOTE_PAIRING_CODE } from "@/lib/remote/config";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -16,7 +17,7 @@ const encoder = new TextEncoder();
 const globalRemote = globalThis as typeof globalThis & { __mcpRemoteState?: RemoteState };
 
 function createPairingCode() {
-  return "777777";
+  return REMOTE_PAIRING_CODE;
 }
 
 function getState() {
