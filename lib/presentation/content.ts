@@ -128,7 +128,7 @@ export async function getDeckContent(): Promise<DeckContent> {
   const title = markdown.match(/^#\s+(.+)$/m)?.[1]?.trim() ?? "Model Context Protocol";
   const subtitle =
     markdown.match(/^>\s+(.+)$/m)?.[1]?.replace(/\*/g, "").trim() ??
-    "Materi Sharing Session - Divisi Teknologi & Inovasi";
+    "Materi Sharing Session - Divisi Teknologi & ";
 
   return {
     title,

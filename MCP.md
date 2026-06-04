@@ -1,6 +1,6 @@
 # Model Context Protocol (MCP): Membuka Era Baru AI yang Terhubung
 
-> Materi Sharing Session — Divisi Teknologi & Inovasi
+> Materi Sharing Session — Divisi IT
 
 ---
 
