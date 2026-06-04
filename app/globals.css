@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.75rem;
+  --bg-base: #07101f;
+  --bg-card: #10213d;
+  --bg-card-hover: #15325c;
+  --border-subtle: #234879;
+  --border-accent: #1591dc;
+  --text-primary: #f5fbff;
+  --text-muted: #8fb9d8;
+  --text-dim: #c4e2f5;
+  --accent-deep-blue: #2c5ead;
+  --accent-blue: #1591dc;
+  --accent-sky: #4bb8fa;
+  --accent-ice: #c4e2f5;
+  --accent-green: #34d399;
+  --accent-yellow: #fbbf24;
+  --accent-gradient-from: #c4e2f5;
+  --accent-gradient-mid: #4bb8fa;
+  --accent-gradient-to: #1591dc;
+  --background: var(--bg-base);
+  --foreground: var(--text-primary);
+  --card: var(--bg-card);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-card);
+  --popover-foreground: var(--text-primary);
+  --primary: #1591dc;
+  --primary-foreground: #ffffff;
+  --secondary: var(--bg-card-hover);
+  --secondary-foreground: var(--text-primary);
+  --muted: var(--bg-card-hover);
+  --muted-foreground: var(--text-dim);
+  --accent: var(--bg-card-hover);
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --border: var(--border-subtle);
+  --input: var(--border-subtle);
+  --ring: var(--accent-blue);
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(75, 184, 250, 0.2), transparent 28%),
+    radial-gradient(circle at 82% 12%, rgba(21, 145, 220, 0.2), transparent 30%),
+    radial-gradient(circle at 68% 84%, rgba(196, 226, 245, 0.12), transparent 28%),
+    var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+.gradient-text {
+  display: inline-block;
+  background-image: linear-gradient(
+    90deg,
+    var(--accent-gradient-from),
+    var(--accent-gradient-mid),
+    var(--accent-gradient-to)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.deck-surface {
+  background:
+    linear-gradient(135deg, rgba(75, 184, 250, 0.14), rgba(44, 94, 173, 0.18)),
+    rgba(16, 33, 61, 0.92);
+  box-shadow: 0 18px 60px rgba(3, 12, 28, 0.32);
+}
