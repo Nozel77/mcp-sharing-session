@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ProgressDots } from "@/components/ProgressDots";
-import { RemotePairingPanel } from "@/components/RemotePairingPanel";
 import { SlideNav } from "@/components/SlideNav";
 import { SLIDES } from "@/data/slides";
 import type { RemoteSnapshot } from "@/lib/remote/types";
@@ -81,7 +80,6 @@ export function SlideShow() {
   return (
     <main className="min-h-screen bg-[#0a0e1a] text-[#e2e8f0]">
       <ProgressDots total={total} current={currentSlide} />
-      <RemotePairingPanel />
       <AnimatePresence mode="wait">
         <motion.div
           key={SLIDES[currentSlide].id}

