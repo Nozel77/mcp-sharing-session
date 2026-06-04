@@ -1,26 +1,70 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ProgressDots } from "@/components/ProgressDots";
+import { RemotePairingPanel } from "@/components/RemotePairingPanel";
 import { SlideNav } from "@/components/SlideNav";
 import { SLIDES } from "@/data/slides";
+import type { RemoteSnapshot } from "@/lib/remote/types";
+
+async function syncSlide(slide: number, total: number) {
+  await fetch("/api/remote", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "sync", slide, total }),
+  }).catch(() => {});
+}
 
 export function SlideShow() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const total = SLIDES.length;
+  const slideRef = useRef(currentSlide);
+
+  const setSlide = useCallback(
+    (nextSlide: number, shouldSync = true) => {
+      const clamped = Math.max(0, Math.min(nextSlide, total - 1));
+      slideRef.current = clamped;
+      setCurrentSlide(clamped);
+
+      if (shouldSync) {
+        void syncSlide(clamped, total);
+      }
+    },
+    [total],
+  );
 
   const goNext = useCallback(() => {
-    setCurrentSlide((current) => Math.min(current + 1, total - 1));
-  }, [total]);
+    setSlide(slideRef.current + 1);
+  }, [setSlide]);
 
   const goPrev = useCallback(() => {
-    setCurrentSlide((current) => Math.max(current - 1, 0));
-  }, []);
+    setSlide(slideRef.current - 1);
+  }, [setSlide]);
 
   const restart = useCallback(() => {
-    setCurrentSlide(0);
-  }, []);
+    setSlide(0);
+  }, [setSlide]);
+
+  useEffect(() => {
+    slideRef.current = currentSlide;
+  }, [currentSlide]);
+
+  useEffect(() => {
+    void syncSlide(slideRef.current, total);
+
+    const events = new EventSource("/api/remote");
+    events.addEventListener("state", (event) => {
+      const snapshot = JSON.parse((event as MessageEvent).data) as RemoteSnapshot;
+      const nextSlide = Math.max(0, Math.min(snapshot.currentSlide, total - 1));
+
+      if (nextSlide !== slideRef.current) {
+        setSlide(nextSlide, false);
+      }
+    });
+
+    return () => events.close();
+  }, [setSlide, total]);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -37,6 +81,7 @@ export function SlideShow() {
   return (
     <main className="min-h-screen bg-[#0a0e1a] text-[#e2e8f0]">
       <ProgressDots total={total} current={currentSlide} />
+      <RemotePairingPanel />
       <AnimatePresence mode="wait">
         <motion.div
           key={SLIDES[currentSlide].id}
