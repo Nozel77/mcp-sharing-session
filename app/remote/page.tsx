@@ -1,10 +1,12 @@
 "use client";
 
 import { ChevronLeft, ChevronRight, Eye, EyeOff, Maximize2, RotateCcw, Smartphone } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { RemoteSnapshot } from "@/lib/remote/types";
+import { REMOTE_PAIRING_CODE } from "@/lib/remote/config";
+import { getSupabaseRemoteClient, isSupabaseRemoteEnabled, REMOTE_CHANNEL_NAME } from "@/lib/remote/supabase";
+import type { RemoteDevice, RemoteSnapshot, RemoteStatePayload } from "@/lib/remote/types";
 
 async function postRemote(body: Record<string, unknown>) {
   const response = await fetch("/api/remote", {
@@ -17,8 +19,20 @@ async function postRemote(body: Record<string, unknown>) {
   return data;
 }
 
+function createSupabaseInitialSnapshot(): RemoteSnapshot {
+  return {
+    pairingCode: REMOTE_PAIRING_CODE,
+    currentSlide: 0,
+    total: 10,
+    devices: [],
+    updatedAt: Date.now(),
+  };
+}
+
 export default function RemotePage() {
-  const [snapshot, setSnapshot] = useState<RemoteSnapshot | null>(null);
+  const [snapshot, setSnapshot] = useState<RemoteSnapshot | null>(() =>
+    isSupabaseRemoteEnabled() ? createSupabaseInitialSnapshot() : null,
+  );
   const [deviceId, setDeviceId] = useState(() =>
     typeof window === "undefined" ? "" : (localStorage.getItem("mcpRemoteDeviceId") ?? ""),
   );
@@ -30,8 +44,36 @@ export default function RemotePage() {
   const [controlsHidden, setControlsHidden] = useState(() =>
     typeof window === "undefined" ? false : localStorage.getItem("mcpRemoteControlsHidden") === "true",
   );
+  const remoteMode = isSupabaseRemoteEnabled() ? "supabase" : "api";
+  const remoteChannelRef = useRef<ReturnType<NonNullable<ReturnType<typeof getSupabaseRemoteClient>>["channel"]> | null>(
+    null,
+  );
 
   useEffect(() => {
+    const supabase = getSupabaseRemoteClient();
+
+    if (supabase) {
+      const channel = supabase
+        .channel(REMOTE_CHANNEL_NAME)
+        .on("broadcast", { event: "state" }, ({ payload }: { payload: RemoteStatePayload }) => {
+          setSnapshot((current) => ({
+            pairingCode: REMOTE_PAIRING_CODE,
+            currentSlide: payload.currentSlide,
+            total: payload.total,
+            devices: current?.devices ?? [],
+            updatedAt: payload.updatedAt,
+          }));
+        })
+        .subscribe();
+
+      remoteChannelRef.current = channel;
+
+      return () => {
+        remoteChannelRef.current = null;
+        void supabase.removeChannel(channel);
+      };
+    }
+
     fetch("/api/remote?format=json")
       .then((response) => response.json())
       .then((data: RemoteSnapshot) => setSnapshot(data))
@@ -52,6 +94,39 @@ export default function RemotePage() {
     setError("");
     try {
       const remoteName = name.trim() || "HP Remote";
+      if (remoteMode === "supabase") {
+        if (code.trim() !== REMOTE_PAIRING_CODE) {
+          throw new Error("Kode pairing salah.");
+        }
+
+        const id = deviceId || crypto.randomUUID();
+        const device: RemoteDevice = {
+          id,
+          name: remoteName,
+          status: "approved",
+          lastSeen: Date.now(),
+        };
+
+        localStorage.setItem("mcpRemoteDeviceId", id);
+        localStorage.setItem("mcpRemoteName", remoteName);
+        setDeviceId(id);
+        setName(remoteName);
+        setSnapshot((current) => ({
+          pairingCode: REMOTE_PAIRING_CODE,
+          currentSlide: current?.currentSlide ?? 0,
+          total: current?.total ?? 10,
+          devices: [device],
+          updatedAt: Date.now(),
+        }));
+
+        await remoteChannelRef.current?.send({
+          type: "broadcast",
+          event: "pair",
+          payload: { deviceId: id, name: remoteName, sentAt: Date.now() },
+        });
+        return;
+      }
+
       const result = await postRemote({ action: "pair", code: code.trim(), name: remoteName, deviceId });
       localStorage.setItem("mcpRemoteDeviceId", result.deviceId);
       localStorage.setItem("mcpRemoteName", remoteName);
@@ -65,6 +140,24 @@ export default function RemotePage() {
   async function command(value: "prev" | "next" | "restart") {
     setError("");
     try {
+      if (remoteMode === "supabase") {
+        if (!approved) {
+          throw new Error("Remote belum di-pair.");
+        }
+
+        await remoteChannelRef.current?.send({
+          type: "broadcast",
+          event: "command",
+          payload: {
+            command: value,
+            deviceId,
+            total: snapshot?.total ?? 10,
+            sentAt: Date.now(),
+          },
+        });
+        return;
+      }
+
       await postRemote({ action: "command", command: value, deviceId, total: snapshot?.total ?? 10 });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Command gagal.");

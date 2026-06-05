@@ -8,7 +8,8 @@ import { SlideNav } from "@/components/SlideNav";
 import { Button } from "@/components/ui/button";
 import { SLIDES } from "@/data/slides";
 import { REMOTE_PAIRING_CODE } from "@/lib/remote/config";
-import type { RemoteSnapshot } from "@/lib/remote/types";
+import { getSupabaseRemoteClient, isSupabaseRemoteEnabled, REMOTE_CHANNEL_NAME } from "@/lib/remote/supabase";
+import type { RemoteCommandPayload, RemoteSnapshot } from "@/lib/remote/types";
 
 async function syncSlide(slide: number, total: number) {
   await fetch("/api/remote", {
@@ -16,6 +17,11 @@ async function syncSlide(slide: number, total: number) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ action: "sync", slide, total }),
   }).catch(() => {});
+}
+
+function clampSlide(value: number, total: number) {
+  if (!Number.isFinite(value)) return 0;
+  return Math.max(0, Math.min(Math.trunc(value), Math.max(0, total - 1)));
 }
 
 export function SlideShow() {
@@ -30,6 +36,24 @@ export function SlideShow() {
   );
   const total = SLIDES.length;
   const slideRef = useRef(currentSlide);
+  const remoteChannelRef = useRef<ReturnType<NonNullable<ReturnType<typeof getSupabaseRemoteClient>>["channel"]> | null>(
+    null,
+  );
+
+  const broadcastState = useCallback((slide: number) => {
+    const channel = remoteChannelRef.current;
+    if (!channel) return;
+
+    void channel.send({
+      type: "broadcast",
+      event: "state",
+      payload: {
+        currentSlide: slide,
+        total,
+        updatedAt: Date.now(),
+      },
+    });
+  }, [total]);
 
   const setSlide = useCallback(
     (nextSlide: number, shouldSync = true) => {
@@ -38,10 +62,16 @@ export function SlideShow() {
       setCurrentSlide(clamped);
 
       if (shouldSync) {
-        if (isPresenter) void syncSlide(clamped, total);
+        if (isPresenter) {
+          if (isSupabaseRemoteEnabled()) {
+            broadcastState(clamped);
+          } else {
+            void syncSlide(clamped, total);
+          }
+        }
       }
     },
-    [isPresenter, total],
+    [broadcastState, isPresenter, total],
   );
 
   const goNext = useCallback(() => {
@@ -82,6 +112,31 @@ export function SlideShow() {
   useEffect(() => {
     if (!isPresenter) return;
 
+    const supabase = getSupabaseRemoteClient();
+
+    if (supabase) {
+      const channel = supabase
+        .channel(REMOTE_CHANNEL_NAME)
+        .on("broadcast", { event: "command" }, ({ payload }: { payload: RemoteCommandPayload }) => {
+          if (payload.command === "next") setSlide(slideRef.current + 1);
+          if (payload.command === "prev") setSlide(slideRef.current - 1);
+          if (payload.command === "restart") setSlide(0);
+          if (payload.command === "set") setSlide(clampSlide(Number(payload.slide), total));
+        })
+        .subscribe((status) => {
+          if (status === "SUBSCRIBED") {
+            broadcastState(slideRef.current);
+          }
+        });
+
+      remoteChannelRef.current = channel;
+
+      return () => {
+        remoteChannelRef.current = null;
+        void supabase.removeChannel(channel);
+      };
+    }
+
     void syncSlide(slideRef.current, total);
 
     const events = new EventSource("/api/remote");
@@ -95,7 +150,7 @@ export function SlideShow() {
     });
 
     return () => events.close();
-  }, [isPresenter, setSlide, total]);
+  }, [broadcastState, isPresenter, setSlide, total]);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {

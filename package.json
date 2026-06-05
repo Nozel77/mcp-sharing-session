@@ -15,6 +15,7 @@
     "@radix-ui/react-scroll-area": "^1.2.10",
     "@radix-ui/react-separator": "^1.1.8",
     "@radix-ui/react-slot": "latest",
+    "@supabase/supabase-js": "^2.107.0",
     "@tanstack/react-query": "latest",
     "@tanstack/react-query-devtools": "latest",
     "class-variance-authority": "latest",

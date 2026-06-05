@@ -15,3 +15,24 @@ export type RemoteSnapshot = {
   updatedAt: number;
 };
 
+export type RemoteCommand = "prev" | "next" | "restart" | "set";
+
+export type RemoteCommandPayload = {
+  command: RemoteCommand;
+  deviceId: string;
+  total: number;
+  slide?: number;
+  sentAt: number;
+};
+
+export type RemoteStatePayload = {
+  currentSlide: number;
+  total: number;
+  updatedAt: number;
+};
+
+export type RemotePairPayload = {
+  deviceId: string;
+  name: string;
+  sentAt: number;
+};
