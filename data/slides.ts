@@ -28,8 +28,8 @@ export const SLIDES: SlideConfig[] = [
   { id: "use-cases", component: Slide05UseCases },
   { id: "before-after", component: Slide06BeforeAfter },
   { id: "risk-guardrails", component: Slide07RiskGuardrails },
+  { id: "get-started", component: Slide10GetStarted },
   { id: "demo-flow", component: Slide08DemoFlow },
   { id: "adoption-roadmap", component: Slide09AdoptionRoadmap },
-  { id: "get-started", component: Slide10GetStarted },
   { id: "qa", component: Slide11QA },
 ];
