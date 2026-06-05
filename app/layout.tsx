@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { PwaRegistration } from "@/components/PwaRegistration";
 import { Providers } from "@/components/providers";
 
 const inter = Inter({
@@ -11,6 +12,16 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "MCP Sharing Session",
   description: "Fullscreen presentation deck for Model Context Protocol.",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "MCP Remote",
+  },
+  icons: {
+    icon: "/remote-icon.svg",
+    apple: "/remote-icon.svg",
+  },
 };
 
 export default function RootLayout({
@@ -21,6 +32,7 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body className={inter.variable}>
+        <PwaRegistration />
         <Providers>{children}</Providers>
       </body>
     </html>
