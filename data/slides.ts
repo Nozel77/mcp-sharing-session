@@ -7,8 +7,11 @@ import Slide04TriedMCP from "@/components/slides/Slide04TriedMCP";
 import Slide05McpSkills from "@/components/slides/Slide05McpSkills";
 import Slide05UseCases from "@/components/slides/Slide05UseCases";
 import Slide06BeforeAfter from "@/components/slides/Slide06BeforeAfter";
-import Slide07GetStarted from "@/components/slides/Slide07GetStarted";
-import Slide08QA from "@/components/slides/Slide08QA";
+import Slide07RiskGuardrails from "@/components/slides/Slide07RiskGuardrails";
+import Slide08DemoFlow from "@/components/slides/Slide08DemoFlow";
+import Slide09AdoptionRoadmap from "@/components/slides/Slide09AdoptionRoadmap";
+import Slide10GetStarted from "@/components/slides/Slide07GetStarted";
+import Slide11QA from "@/components/slides/Slide08QA";
 
 export interface SlideConfig {
   id: string;
@@ -24,6 +27,9 @@ export const SLIDES: SlideConfig[] = [
   { id: "mcp-skills", component: Slide05McpSkills },
   { id: "use-cases", component: Slide05UseCases },
   { id: "before-after", component: Slide06BeforeAfter },
-  { id: "get-started", component: Slide07GetStarted },
-  { id: "qa", component: Slide08QA },
+  { id: "risk-guardrails", component: Slide07RiskGuardrails },
+  { id: "demo-flow", component: Slide08DemoFlow },
+  { id: "adoption-roadmap", component: Slide09AdoptionRoadmap },
+  { id: "get-started", component: Slide10GetStarted },
+  { id: "qa", component: Slide11QA },
 ];

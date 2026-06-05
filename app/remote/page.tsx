@@ -184,7 +184,7 @@ export default function RemotePage() {
   }
 
   return (
-    <main className="min-h-dvh bg-[#07101f] px-4 py-6 text-white">
+    <main className="h-dvh overflow-hidden bg-[#07101f] px-4 py-6 text-white">
       <section className="mx-auto flex min-h-[calc(100dvh-48px)] max-w-md flex-col">
         <div className="flex items-center justify-between gap-3">
           <div className="flex size-11 items-center justify-center rounded-lg border border-[#4BB8FA]/40 bg-[#1591DC]/18 text-[#4BB8FA]">

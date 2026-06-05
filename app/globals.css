@@ -66,10 +66,21 @@
 
 * {
   border-color: var(--border);
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
-  min-height: 100vh;
+  height: 100%;
+  overflow: hidden;
   background:
     radial-gradient(circle at 18% 18%, rgba(75, 184, 250, 0.2), transparent 28%),
     radial-gradient(circle at 82% 12%, rgba(21, 145, 220, 0.2), transparent 30%),
