@@ -66,16 +66,27 @@
 
 * {
   border-color: var(--border);
-  scrollbar-width: none;
 }
 
-*::-webkit-scrollbar {
-  display: none;
+@media (min-width: 768px) {
+  * {
+    scrollbar-width: none;
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 html {
   height: 100%;
   overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  html {
+    overflow: auto;
+  }
 }
 
 body {
@@ -88,6 +99,14 @@ body {
     var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+@media (max-width: 767px) {
+  body {
+    height: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 }
 
 .gradient-text {

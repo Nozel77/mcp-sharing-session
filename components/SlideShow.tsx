@@ -165,7 +165,7 @@ export function SlideShow() {
   const ActiveSlide = useMemo(() => SLIDES[currentSlide].component, [currentSlide]);
 
   return (
-    <main className="h-dvh overflow-hidden bg-[#0a0e1a] text-[#e2e8f0]">
+    <main className="h-dvh overflow-hidden bg-[#0a0e1a] text-[#e2e8f0] md:h-dvh md:overflow-hidden max-md:h-auto max-md:min-h-dvh max-md:overflow-y-auto">
       <ProgressDots total={total} current={currentSlide} />
       <AnimatePresence mode="wait">
         <motion.div
