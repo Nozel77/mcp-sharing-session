@@ -18,8 +18,8 @@ const phases = [
   {
     week: "Week 3",
     icon: <Layers className="size-5" />,
-    title: "Role-based workflow",
-    body: "FE, BE, QA, OPS punya prompt dan SKILLS.md sesuai standar kerja masing-masing.",
+    title: "Backend workflow",
+    body: "Buat prompt dan SKILLS.md khusus review endpoint, validasi API contract, dan debugging data.",
   },
   {
     week: "Week 4",

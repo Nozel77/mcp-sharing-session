@@ -48,7 +48,7 @@ export function StrategyDeck({ deck }: StrategyDeckProps) {
         <div className="border-b border-white/10 p-5">
           <Badge className="bg-blue-500 text-white">MCP Strategy Deck</Badge>
           <h1 className="mt-4 text-xl font-semibold leading-tight">Model Context Protocol</h1>
-          <p className="mt-2 text-sm leading-6 text-slate-400">Clean presentation web from MCP.md</p>
+          <p className="mt-2 text-sm leading-6 text-slate-400">Generated reference deck from MCP.md</p>
         </div>
 
         <ScrollArea className="flex-1">

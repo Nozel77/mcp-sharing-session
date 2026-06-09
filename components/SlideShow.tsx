@@ -31,10 +31,9 @@ export function SlideShow() {
 
     return new URLSearchParams(window.location.search).get("presenter") === REMOTE_PAIRING_CODE;
   });
-  const [controlsHidden, setControlsHidden] = useState(() =>
-    typeof window === "undefined" ? false : localStorage.getItem("mcpDesktopControlsHidden") === "true",
-  );
+  const [controlsHidden, setControlsHidden] = useState(false);
   const total = SLIDES.length;
+  const activeMeta = SLIDES[currentSlide];
   const slideRef = useRef(currentSlide);
   const remoteChannelRef = useRef<ReturnType<NonNullable<ReturnType<typeof getSupabaseRemoteClient>>["channel"]> | null>(
     null,
@@ -110,6 +109,14 @@ export function SlideShow() {
   }, [currentSlide]);
 
   useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      setControlsHidden(localStorage.getItem("mcpDesktopControlsHidden") === "true");
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(() => {
     if (!isPresenter) return;
 
     const supabase = getSupabaseRemoteClient();
@@ -162,11 +169,11 @@ export function SlideShow() {
     return () => window.removeEventListener("keydown", handleKey);
   }, [goNext, goPrev, restart]);
 
-  const ActiveSlide = useMemo(() => SLIDES[currentSlide].component, [currentSlide]);
+  const ActiveSlide = useMemo(() => activeMeta.component, [activeMeta]);
 
   return (
     <main className="h-dvh overflow-hidden bg-[#0a0e1a] text-[#e2e8f0] md:h-dvh md:overflow-hidden max-md:h-auto max-md:min-h-dvh max-md:overflow-y-auto">
-      <ProgressDots total={total} current={currentSlide} />
+      <ProgressDots total={total} current={currentSlide} labels={SLIDES.map((slide) => slide.title)} />
       <AnimatePresence mode="wait">
         <motion.div
           key={SLIDES[currentSlide].id}
@@ -191,6 +198,8 @@ export function SlideShow() {
         <SlideNav
           current={currentSlide}
           total={total}
+          title={activeMeta.title}
+          section={activeMeta.section}
           onPrev={goPrev}
           onNext={goNext}
           onRestart={restart}

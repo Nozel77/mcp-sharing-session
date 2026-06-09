@@ -24,7 +24,7 @@ function getState() {
   globalRemote.__mcpRemoteState ??= {
     pairingCode: createPairingCode(),
     currentSlide: 0,
-    total: 10,
+    total: 16,
     devices: new Map(),
     clients: new Set(),
     updatedAt: Date.now(),

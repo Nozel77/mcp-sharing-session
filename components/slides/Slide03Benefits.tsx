@@ -15,7 +15,7 @@ export default function Slide03Benefits() {
 
   return (
     <SlideWrapper>
-      <SectionTitle gradient="Manfaat" plain="MCP" subtitle="Enam alasan MCP mengubah cara kamu bekerja" />
+      <SectionTitle gradient="Manfaat" plain="MCP" subtitle="Enam alasan MCP mengubah cara kita bekerja" />
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {cards.map(([icon, title, description]) => (
           <InfoCard key={title} icon={icon} title={title} description={description} />

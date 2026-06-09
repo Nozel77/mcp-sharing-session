@@ -11,7 +11,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "MCP Sharing Session",
-  description: "Fullscreen presentation deck for Model Context Protocol.",
+  description: "Deck internal Divisi IT tentang Model Context Protocol, workflow AI, guardrails, demo, dan roadmap adopsi tim.",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,

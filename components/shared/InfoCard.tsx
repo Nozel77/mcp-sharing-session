@@ -15,7 +15,7 @@ export function InfoCard({
   return (
     <article
       className={cn(
-        "deck-surface flex min-w-0 gap-3 rounded-xl border border-[#234879] p-4 transition-all duration-200 hover:border-[#4BB8FA]/70 hover:bg-[#15325c] sm:gap-4 sm:p-5",
+        "deck-surface flex min-w-0 gap-3 rounded-lg border border-[#234879] p-4 transition-all duration-200 hover:border-[#4BB8FA]/70 hover:bg-[#15325c] sm:gap-4 sm:p-5",
         className,
       )}
     >

@@ -363,7 +363,7 @@ Total: ~10 menit — langkah terstruktur, minim human error
 | QA | Buat Test Case dari Tiket | 60 menit | 15 menit | **~45 menit** |
 | OPS | Respons Insiden | 40 menit | 10 menit | **~30 menit** |
 
-> **Rata-rata engineer yang menggunakan MCP menghemat 2–4 jam kerja per hari** dari tugas-tugas repetitif dan context switching antar tools.
+> **Estimasi skenario sharing:** workflow berbasis MCP berpotensi menghemat waktu dari tugas repetitif dan context switching. Angka riil perlu divalidasi lewat pilot tim.
 
 ---
 

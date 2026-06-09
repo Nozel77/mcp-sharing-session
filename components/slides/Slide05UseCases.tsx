@@ -1,46 +1,55 @@
+import { Bug, Database, FileCheck2, GitPullRequest, Route } from "lucide-react";
 import { WorkflowStep } from "@/components/shared/WorkflowStep";
 import { SectionTitle } from "@/components/shared/SectionTitle";
 import { SlideWrapper } from "@/components/shared/SlideWrapper";
 
-const workflows = [
+const experiences = [
   {
-    title: "FE: UI Consistency Check",
+    title: "Saat validasi request backend gagal",
+    context: "Yang sering aku cek: Pydantic model, controller, router, dan contoh payload.",
+    icon: <Bug className="size-5" />,
+    accent: "text-[#f87171]",
+    steps: [
+      "Aku mulai dari error response atau field yang ditolak backend",
+      "Minta AI baca file model request, controller, dan router terkait",
+      "Bandingkan field wajib/opsional dengan payload yang dikirim frontend",
+      "Hasil yang aku pakai: penyebab validasi gagal + patch kecil yang masih aku review",
+    ],
+  },
+  {
+    title: "Saat endpoint baru perlu dicocokkan",
+    context: "Contoh kasus: flow finance, voucher, atau admin academic yang banyak role dan payload.",
+    icon: <Route className="size-5" />,
     accent: "text-[#4BB8FA]",
     steps: [
-      "Ambil semua PR yang menyentuh /components hari ini",
-      "Bandingkan Button.tsx dengan spesifikasi Figma",
-      "Review PR #88 - fokus aksesibilitas & responsivitas",
-      "Buat tiket untuk perbedaan desain yang ditemukan",
+      "Aku minta AI telusuri route prefix dan path endpoint",
+      "AI bantu cek request model, response helper, dan dependency service",
+      "Aku validasi apakah naming, status code, dan payload sudah konsisten",
+      "Hasil yang aku pakai: checklist mismatch sebelum endpoint dites manual",
     ],
   },
   {
-    title: "BE: Debug & Root Cause",
-    accent: "text-[#34d399]",
-    steps: [
-      "Ambil 20 error terbaru Sentry - service payment-api",
-      "Kelompokkan error berdasarkan pola",
-      "Baca file handler di GitHub, identifikasi logic bermasalah",
-      "Tulis RCA draft + PR description untuk fix",
-    ],
-  },
-  {
-    title: "QA: Test Case dari Tiket",
+    title: "Saat butuh memahami data nyata",
+    context: "MCP MongoDB paling kepakai untuk inspect schema dan sample document read-only.",
+    icon: <Database className="size-5" />,
     accent: "text-[#fbbf24]",
     steps: [
-      "Baca tiket Jira #DEV-310 + PR terkait",
-      "Generate test case: happy path, edge case, negative",
-      "Review dan revisi",
-      "Simpan ke Confluence, update status tiket",
+      "Aku ambil sample document dari collection yang relevan",
+      "AI bantu rangkum field aktual, nullable, array/object, dan pola value",
+      "Aku cocokkan dengan asumsi di service atau aggregation pipeline",
+      "Hasil yang aku pakai: query/verifikasi read-only sebelum ubah logic",
     ],
   },
   {
-    title: "OPS: Incident Response",
-    accent: "text-[#C4E2F5]",
+    title: "Saat review perubahan backend",
+    context: "Fokusku bukan minta AI approve PR, tapi mempercepat baca dampak perubahan.",
+    icon: <GitPullRequest className="size-5" />,
+    accent: "text-[#34d399]",
     steps: [
-      "Cek pod tidak sehat di namespace production",
-      "Ambil log 50 baris terakhir dari pod crash",
-      "Query DB: cek spike koneksi 1 jam terakhir",
-      "Draft update insiden -> channel #ops-incident",
+      "Aku minta AI baca diff dan file sekitar yang ikut terdampak",
+      "AI bantu tandai area rawan: auth, validation, transaction, dan error handling",
+      "Aku cek ulang temuan yang punya risiko behavior regression",
+      "Hasil yang aku pakai: komentar review singkat + daftar test yang perlu ada",
     ],
   },
 ];
@@ -50,15 +59,23 @@ export default function Slide05UseCases() {
     <SlideWrapper>
       <SectionTitle
         gradient="Daily"
-        plain="Workflow"
-        subtitle="Bagaimana MCP terlihat dalam pekerjaan sehari-hari"
+        plain="Backend Experience"
+        subtitle="Ini pola yang benar-benar paling kepakai di workflow backend-ku"
       />
       <div className="grid gap-4 md:grid-cols-2">
-        {workflows.map((workflow) => (
-          <article key={workflow.title} className="deck-surface rounded-xl border border-[#234879] p-4 sm:p-5">
-            <h2 className={`text-sm font-semibold ${workflow.accent}`}>{workflow.title}</h2>
-            <ol className="mt-5 space-y-3">
-              {workflow.steps.map((step, index) => (
+        {experiences.map((item) => (
+          <article key={item.title} className="deck-surface rounded-lg border border-[#234879] p-4 sm:p-5">
+            <div className="mb-4 flex gap-3">
+              <div className={`flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#0b1b33] ring-1 ring-[#234879] ${item.accent}`}>
+                {item.icon}
+              </div>
+              <div>
+                <h2 className={`text-sm font-semibold ${item.accent}`}>{item.title}</h2>
+                <p className="mt-1 text-xs leading-relaxed text-[#8fb9d8]">{item.context}</p>
+              </div>
+            </div>
+            <ol className="space-y-3">
+              {item.steps.map((step, index) => (
                 <WorkflowStep key={step} number={index + 1}>
                   {step}
                 </WorkflowStep>
@@ -66,6 +83,13 @@ export default function Slide05UseCases() {
             </ol>
           </article>
         ))}
+      </div>
+      <div className="mx-auto mt-6 flex max-w-4xl items-center gap-3 rounded-lg border border-[#4BB8FA]/35 bg-[#0b1b33]/85 px-4 py-3 text-xs leading-relaxed text-[#C4E2F5]">
+        <FileCheck2 className="size-4 shrink-0 text-[#4BB8FA]" />
+        <p>
+          Intinya: MCP paling terasa bukan karena AI langsung benar, tapi karena aku tidak perlu copy-paste banyak konteks
+          backend sebelum mulai analisis.
+        </p>
       </div>
     </SlideWrapper>
   );

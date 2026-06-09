@@ -6,6 +6,9 @@ import { SectionTitle } from "@/components/shared/SectionTitle";
 import { SlideWrapper } from "@/components/shared/SlideWrapper";
 
 const context7Command = `codex mcp add context7 -- npx -y @upstash/context7-mcp`;
+const pilotPrompt = `Baca router, controller, service, dan model untuk endpoint ini.
+Cocokkan request schema dengan OpenAPI atau payload contoh.
+Tulis root cause, patch kecil, dan command verifikasi yang relevan.`;
 
 export default function Slide07GetStarted() {
   return (
@@ -56,20 +59,6 @@ export default function Slide07GetStarted() {
             ))}
           </div>
         </StepCard>
-      </div>
-      <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2">
-        {["codex mcp --help", "~/.codex/config.toml", "github.com/upstash/context7", "modelcontextprotocol.io"].map(
-          (link) => (
-            <span key={link} className="text-xs text-[#4BB8FA]">
-              {link}
-            </span>
-          ),
-        )}
-      </div>
-      <div className="mx-auto mt-7 max-w-3xl rounded-xl border border-[#4BB8FA]/40 bg-gradient-to-r from-[#2C5EAD]/35 via-[#1591DC]/20 to-[#4BB8FA]/12 px-4 py-5 text-center shadow-[0_0_38px_rgba(75,184,250,0.16)] sm:px-6 md:px-8">
-        <p className="text-base font-semibold italic leading-relaxed text-[#F5FBFF] md:text-xl">
-          &quot;AI terbaik bukan yang paling pintar, tapi yang paling terhubung dengan konteks kerja nyata kamu.&quot;
-        </p>
       </div>
     </SlideWrapper>
   );

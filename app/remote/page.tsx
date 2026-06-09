@@ -1,9 +1,10 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Eye, EyeOff, Maximize2, RotateCcw, Smartphone } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye, EyeOff, Maximize2, RotateCcw, Smartphone, Wifi, WifiOff } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SLIDES } from "@/data/slides";
 import { REMOTE_PAIRING_CODE } from "@/lib/remote/config";
 import { getSupabaseRemoteClient, isSupabaseRemoteEnabled, REMOTE_CHANNEL_NAME } from "@/lib/remote/supabase";
 import type { RemoteDevice, RemoteSnapshot, RemoteStatePayload } from "@/lib/remote/types";
@@ -23,7 +24,7 @@ function createSupabaseInitialSnapshot(): RemoteSnapshot {
   return {
     pairingCode: REMOTE_PAIRING_CODE,
     currentSlide: 0,
-    total: 10,
+    total: SLIDES.length,
     devices: [],
     updatedAt: Date.now(),
   };
@@ -33,17 +34,12 @@ export default function RemotePage() {
   const [snapshot, setSnapshot] = useState<RemoteSnapshot | null>(() =>
     isSupabaseRemoteEnabled() ? createSupabaseInitialSnapshot() : null,
   );
-  const [deviceId, setDeviceId] = useState(() =>
-    typeof window === "undefined" ? "" : (localStorage.getItem("mcpRemoteDeviceId") ?? ""),
-  );
-  const [name, setName] = useState(() =>
-    typeof window === "undefined" ? "" : (localStorage.getItem("mcpRemoteName") ?? ""),
-  );
+  const [deviceId, setDeviceId] = useState("");
+  const [name, setName] = useState("");
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
-  const [controlsHidden, setControlsHidden] = useState(() =>
-    typeof window === "undefined" ? false : localStorage.getItem("mcpRemoteControlsHidden") === "true",
-  );
+  const [controlsHidden, setControlsHidden] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
   const remoteMode = isSupabaseRemoteEnabled() ? "supabase" : "api";
   const remoteChannelRef = useRef<ReturnType<NonNullable<ReturnType<typeof getSupabaseRemoteClient>>["channel"]> | null>(
     null,
@@ -87,8 +83,26 @@ export default function RemotePage() {
     return () => events.close();
   }, []);
 
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      setDeviceId(localStorage.getItem("mcpRemoteDeviceId") ?? "");
+      setName(localStorage.getItem("mcpRemoteName") ?? "");
+      setControlsHidden(localStorage.getItem("mcpRemoteControlsHidden") === "true");
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => setNow(Date.now()), 5000);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
   const device = useMemo(() => snapshot?.devices.find((item) => item.id === deviceId), [deviceId, snapshot?.devices]);
   const approved = device?.status === "approved";
+  const connected = Boolean(snapshot && now - snapshot.updatedAt < 15000);
+  const activeTitle = SLIDES[snapshot?.currentSlide ?? 0]?.title ?? "Waiting";
 
   async function pair() {
     setError("");
@@ -114,7 +128,7 @@ export default function RemotePage() {
         setSnapshot((current) => ({
           pairingCode: REMOTE_PAIRING_CODE,
           currentSlide: current?.currentSlide ?? 0,
-          total: current?.total ?? 10,
+          total: current?.total ?? SLIDES.length,
           devices: [device],
           updatedAt: Date.now(),
         }));
@@ -151,14 +165,14 @@ export default function RemotePage() {
           payload: {
             command: value,
             deviceId,
-            total: snapshot?.total ?? 10,
+            total: snapshot?.total ?? SLIDES.length,
             sentAt: Date.now(),
           },
         });
         return;
       }
 
-      await postRemote({ action: "command", command: value, deviceId, total: snapshot?.total ?? 10 });
+      await postRemote({ action: "command", command: value, deviceId, total: snapshot?.total ?? SLIDES.length });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Command gagal.");
     }
@@ -201,6 +215,14 @@ export default function RemotePage() {
             <Button size="icon" variant="outline" aria-label="Hide controls" className="border-[#234879] bg-[#10213d] text-[#C4E2F5]" onClick={hideControls}>
               <EyeOff className="size-4" />
             </Button>
+          </div>
+        </div>
+        <div className="mt-5 grid grid-cols-3 gap-2 text-center text-xs">
+          <StatusPill active={connected} activeText="Connected" inactiveText="Waiting" />
+          <StatusPill active={approved} activeText="Paired" inactiveText="Not paired" />
+          <div className="rounded-lg border border-[#234879] bg-[#0b1b33]/80 px-2 py-3 text-[#C4E2F5]">
+            <div className="font-semibold text-white">{remoteMode}</div>
+            <div className="mt-1 text-[#8fb9d8]">mode</div>
           </div>
         </div>
 
@@ -267,12 +289,24 @@ export default function RemotePage() {
           <div className="rounded-xl border border-[#234879] bg-[#0b1b33]/80 p-4 text-center">
             <p className="text-sm text-[#8fb9d8]">Slide aktif</p>
             <p className="mt-2 text-3xl font-bold">
-              {(snapshot?.currentSlide ?? 0) + 1} / {snapshot?.total ?? 10}
+              {(snapshot?.currentSlide ?? 0) + 1} / {snapshot?.total ?? SLIDES.length}
             </p>
+            <p className="mt-2 truncate text-xs text-[#8fb9d8]">{activeTitle}</p>
           </div>
         </div>
         )}
       </section>
     </main>
+  );
+}
+
+function StatusPill({ active, activeText, inactiveText }: { active: boolean; activeText: string; inactiveText: string }) {
+  return (
+    <div className={`rounded-lg border px-2 py-3 ${active ? "border-[#34d399]/35 bg-[#34d399]/10" : "border-[#fbbf24]/35 bg-[#fbbf24]/10"}`}>
+      <div className={`mx-auto mb-1 flex size-5 items-center justify-center ${active ? "text-[#34d399]" : "text-[#fbbf24]"}`}>
+        {active ? <Wifi className="size-4" /> : <WifiOff className="size-4" />}
+      </div>
+      <div className="font-semibold text-white">{active ? activeText : inactiveText}</div>
+    </div>
   );
 }

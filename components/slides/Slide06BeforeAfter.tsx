@@ -1,87 +1,83 @@
-"use client";
-
-import { BeforeAfterPanel } from "@/components/shared/BeforeAfterPanel";
+import type { ReactNode } from "react";
+import { CheckCircle2, Clock, FileSearch, ShieldCheck, XCircle } from "lucide-react";
 import { SectionTitle } from "@/components/shared/SectionTitle";
 import { SlideWrapper } from "@/components/shared/SlideWrapper";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const scenarios = {
-  FE: {
-    before: { time: "±48 menit", steps: ["Buka Figma", "Buka GitHub", "Bandingkan manual", "Catat", "Buat tiket Jira"] },
-    after: { time: "±10 menit", steps: ["1 instruksi", "Claude baca kode+Figma", "Buat tiket otomatis"] },
-    saving: "Hemat ~38 menit per sesi review",
+const comparisons = [
+  {
+    title: "Debug bug endpoint",
+    before: ["Cari file manual", "Copy potongan kode ke chat", "Bolak-balik cek model dan service", "RCA ditulis setelah konteks terkumpul"],
+    after: ["AI baca file terkait langsung", "Konteks controller-service-model lebih cepat terkumpul", "Root cause draft lebih cepat", "Patch tetap aku review manual"],
   },
-  BE: {
-    before: { time: "±43 menit", steps: ["Buka Sentry", "Copy stack trace", "Cari file di GitHub", "Copy kode", "Analisis", "Tulis RCA"] },
-    after: { time: "±12 menit", steps: ["Ambil error Sentry", "Baca handler GitHub", "RCA otomatis"] },
-    saving: "Hemat ~31 menit per sesi debug",
+  {
+    title: "Cek konsistensi API",
+    before: ["Buka OpenAPI, model, dan controller terpisah", "Cek field satu per satu", "Rawan kelewat field nullable atau naming beda"],
+    after: ["OpenAPI dan code dibaca dalam satu sesi", "Mismatch payload lebih cepat kelihatan", "Output jadi checklist per field"],
   },
-  QA: {
-    before: { time: "±60 menit", steps: ["Baca Jira", "Baca PR diff", "Buka template", "Tulis test case", "Upload"] },
-    after: { time: "±15 menit", steps: ["Baca tiket+PR", "Generate test case", "Review", "Simpan otomatis"] },
-    saving: "Hemat ~45 menit per tiket",
+  {
+    title: "Review perubahan backend",
+    before: ["Baca diff PR", "Cari dampak ke auth, validation, dan DB", "Tulis komentar review manual"],
+    after: ["AI rangkum diff dan file terdampak", "Fokus review pindah ke risiko logic", "Komentar review tetap aku kurasi"],
   },
-  OPS: {
-    before: { time: "±40 menit", steps: ["kubectl manual", "Identifikasi pod", "Query DB", "Analisis", "Tulis update Slack"] },
-    after: { time: "±10 menit", steps: ["Cek pod", "Ambil log+query DB", "Draft RCA otomatis"] },
-    saving: "Hemat ~30 menit per insiden",
-  },
-};
+];
 
-const summary = [
-  ["FE", "48 min", "10 min", "~38 min"],
-  ["BE", "43 min", "12 min", "~31 min"],
-  ["QA", "60 min", "15 min", "~45 min"],
-  ["OPS", "40 min", "10 min", "~30 min"],
+const outcomes = [
+  ["Lebih valid", "Karena konteks diambil dari file, contract, atau sample data nyata."],
+  ["Lebih cepat", "Terutama di fase mengumpulkan konteks dan membandingkan file."],
+  ["Tetap butuh review", "Keputusan akhir, patch, dan akses write tetap di tangan developer."],
 ];
 
 export default function Slide06BeforeAfter() {
   return (
     <SlideWrapper>
-      <SectionTitle gradient="Before" plain="& After" subtitle="Perbandingan workflow manual vs workflow terhubung" />
-      <Tabs defaultValue="FE" className="mx-auto max-w-5xl">
-        <div className="flex justify-center">
-          <TabsList>
-            {Object.keys(scenarios).map((role) => (
-              <TabsTrigger key={role} value={role}>
-                {role}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </div>
-        {Object.entries(scenarios).map(([role, scenario]) => (
-          <TabsContent key={role} value={role}>
-            <BeforeAfterPanel {...scenario} />
-          </TabsContent>
+      <SectionTitle
+        gradient="Before"
+        plain="& After"
+        subtitle="Pengalaman pribadi sebagai backend developer: MCP paling membantu saat context gathering"
+      />
+      <div className="grid gap-4 lg:grid-cols-3">
+        {comparisons.map((item) => (
+          <article key={item.title} className="deck-surface rounded-lg border border-[#234879] p-4">
+            <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-white">
+              <FileSearch className="size-4 text-[#4BB8FA]" />
+              {item.title}
+            </div>
+            <div className="grid gap-3">
+              <Column icon={<XCircle className="size-4 text-[#f87171]" />} title="Sebelum MCP" steps={item.before} />
+              <Column icon={<CheckCircle2 className="size-4 text-[#34d399]" />} title="Dengan MCP" steps={item.after} />
+            </div>
+          </article>
         ))}
-      </Tabs>
-      <div className="mx-auto mt-5 max-w-5xl overflow-x-auto rounded-xl">
-        <table className="w-full min-w-[520px] text-left text-xs">
-          <thead className="bg-[#0b1b33] text-[#8fb9d8]">
-            <tr>
-              {["Role", "Before", "After", "Hemat"].map((header) => (
-                <th key={header} className="px-4 py-2 font-semibold">
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {summary.map((row, index) => (
-              <tr key={row[0]} className={`${index % 2 === 0 ? "bg-[#10213d]" : "bg-[#0b1b33]"} border-t border-[#234879]`}>
-                {row.map((cell) => (
-                  <td key={cell} className="px-4 py-2 text-[#C4E2F5]">
-                    {cell}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="min-w-[520px] bg-[#0b1b33] px-4 py-3 text-center text-xs font-semibold text-[#4BB8FA]">
-          Rata-rata engineer menghemat 2-4 jam kerja per hari
-        </div>
+      </div>
+      <div className="mt-5 grid gap-3 md:grid-cols-3">
+        {outcomes.map(([title, body], index) => (
+          <div key={title} className="rounded-lg border border-[#234879] bg-[#0b1b33]/85 p-4">
+            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
+              {index === 0 ? <ShieldCheck className="size-4 text-[#34d399]" /> : <Clock className="size-4 text-[#4BB8FA]" />}
+              {title}
+            </div>
+            <p className="text-xs leading-relaxed text-[#C4E2F5]">{body}</p>
+          </div>
+        ))}
       </div>
     </SlideWrapper>
+  );
+}
+
+function Column({ icon, title, steps }: { icon: ReactNode; title: string; steps: string[] }) {
+  return (
+    <div className="rounded-lg border border-[#234879] bg-[#07101f]/70 p-3">
+      <div className="mb-2 flex items-center gap-2 text-xs font-semibold text-[#C4E2F5]">
+        {icon}
+        {title}
+      </div>
+      <ol className="space-y-1.5">
+        {steps.map((step, index) => (
+          <li key={step} className="font-mono text-[11px] leading-relaxed text-[#C4E2F5]">
+            {index + 1}. {step}
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 }

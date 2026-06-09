@@ -1,11 +1,14 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, EyeOff, Maximize2, RotateCcw } from "lucide-react";
+import { ChevronLeft, ChevronRight, EyeOff, HelpCircle, Maximize2, RotateCcw, X } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export function SlideNav({
   current,
   total,
+  title,
+  section,
   onPrev,
   onNext,
   onRestart,
@@ -14,6 +17,8 @@ export function SlideNav({
 }: {
   current: number;
   total: number;
+  title: string;
+  section: string;
   onPrev: () => void;
   onNext: () => void;
   onRestart: () => void;
@@ -22,9 +27,30 @@ export function SlideNav({
 }) {
   const isFirst = current === 0;
   const isLast = current === total - 1;
+  const [helpOpen, setHelpOpen] = useState(false);
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-[#234879] bg-[#07101f]/90 backdrop-blur-md">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-[#234879] bg-[#07101f]/92 backdrop-blur-md">
+      {helpOpen ? (
+        <div className="absolute bottom-full right-4 mb-3 w-[min(360px,calc(100vw-32px))] rounded-lg border border-[#234879] bg-[#10213d] p-4 shadow-2xl shadow-black/40">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold text-white">Presenter Help</p>
+              <p className="text-xs text-[#8fb9d8]">Shortcut dan remote.</p>
+            </div>
+            <Button size="icon" variant="ghost" aria-label="Close help" onClick={() => setHelpOpen(false)}>
+              <X className="size-4" />
+            </Button>
+          </div>
+          <div className="grid gap-2 text-xs text-[#C4E2F5]">
+            <HelpRow keys="Right / Space" label="Next slide" />
+            <HelpRow keys="Left" label="Previous slide" />
+            <HelpRow keys="Esc" label="Restart deck" />
+            <HelpRow keys="/remote" label="Phone remote page" />
+            <HelpRow keys="?presenter=777777" label="Enable presenter sync" />
+          </div>
+        </div>
+      ) : null}
       <div className="mx-auto grid min-h-16 max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-2 sm:px-4 md:px-6">
         <Button
           variant="outline"
@@ -37,9 +63,12 @@ export function SlideNav({
           <span className="hidden sm:inline">Previous</span>
         </Button>
         <div className="flex min-w-0 items-center justify-center gap-1 sm:gap-2 md:gap-4">
-          <span className="truncate text-xs text-[#8fb9d8] sm:text-sm">
-            Slide {current + 1} / {total}
-          </span>
+          <div className="min-w-0 text-center">
+            <span className="block truncate text-[10px] font-semibold uppercase text-[#4BB8FA] sm:text-xs">{section}</span>
+            <span className="block truncate text-xs text-[#8fb9d8] sm:text-sm">
+              {current + 1} / {total} - {title}
+            </span>
+          </div>
           <Button
             variant="ghost"
             size="icon"
@@ -49,6 +78,15 @@ export function SlideNav({
           >
             <RotateCcw className="size-4" />
             <span className="hidden sm:inline">Restart</span>
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setHelpOpen((value) => !value)}
+            aria-label="Presenter help"
+            className="shrink-0 text-[#8fb9d8] hover:bg-[#15325c] hover:text-white"
+          >
+            <HelpCircle className="size-4" />
           </Button>
           <Button
             variant="ghost"
@@ -80,5 +118,14 @@ export function SlideNav({
         </Button>
       </div>
     </nav>
+  );
+}
+
+function HelpRow({ keys, label }: { keys: string; label: string }) {
+  return (
+    <div className="grid grid-cols-[120px_1fr] gap-3 rounded-md bg-[#07101f]/80 px-3 py-2">
+      <span className="font-mono text-[#4BB8FA]">{keys}</span>
+      <span>{label}</span>
+    </div>
   );
 }
