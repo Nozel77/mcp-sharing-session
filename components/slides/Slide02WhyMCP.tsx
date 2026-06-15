@@ -3,27 +3,27 @@ import { SectionTitle } from "@/components/shared/SectionTitle";
 import { SlideWrapper } from "@/components/shared/SlideWrapper";
 
 const items = [
-  ["User copy-paste isi file", "AI membaca file sesuai izin"],
-  ["User buka kalender/email manual", "AI mengambil konteks dari tool"],
-  ["User salin diff GitHub ke chat", "AI membaca repo, PR, issue"],
-  ["User update tiket satu per satu", "AI menyiapkan draft update tiket"],
-  ["User copy hasil query database", "AI menjalankan query read-only terkontrol"],
+  ["Kamu copy-paste isi file ke chat", "AI baca file langsung sesuai izin"],
+  ["Kamu buka email/kalender manual", "AI ambil konteks dari tools"],
+  ["Kamu salin diff GitHub ke chat", "AI baca repo, PR, issue langsung"],
+  ["Kamu update tiket satu per satu", "AI siapkan draft update tiket"],
+  ["Kamu copy hasil query database", "AI jalankan query read-only terkontrol"],
 ];
 
 export default function Slide02WhyMCP() {
   return (
     <SlideWrapper>
       <SectionTitle
-        gradient="Mengapa MCP"
-        plain="Penting?"
-        subtitle="Dari chatbot pasif menjadi asisten kerja yang aktif"
+        gradient="Kenapa Butuh"
+        plain="MCP?"
+        subtitle="Dari chatbot pasif jadi asisten kerja yang aktif"
       />
       <div className="grid gap-6 md:grid-cols-2">
-        <CapabilityCard tone="red" title="Sebelum MCP" subtitle="AI hanya bisa membantu dari teks yang kamu ketik" />
-        <CapabilityCard tone="green" title="Dengan MCP" subtitle="AI bekerja langsung di sistem yang kamu pakai" />
+        <CapabilityCard tone="red" title="Sebelum MCP" subtitle="AI cuma bantu dari teks yang kamu ketik" />
+        <CapabilityCard tone="green" title="Pakai MCP" subtitle="AI kerja langsung di sistem yang kamu pakai" />
       </div>
-      <div className="mx-auto mt-6 max-w-4xl rounded-lg border border-[#c084fc]/30 bg-[#2e1065]/25 px-4 py-4 text-center text-sm text-[#ddd6fe] md:mt-8 md:px-6">
-        MCP mengubah AI dari sekadar chatbot menjadi asisten kerja yang aktif dan terhubung.
+      <div className="mx-auto mt-6 max-w-4xl rounded-lg border border-[#c084fc]/30 bg-[#2e1065]/25 px-4 py-4 text-center text-base text-[#ddd6fe] md:mt-8 md:px-6">
+        MCP ubah AI dari sekadar chatbot jadi asisten kerja yang terhubung langsung ke tools kamu.
       </div>
     </SlideWrapper>
   );

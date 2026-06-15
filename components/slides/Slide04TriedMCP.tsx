@@ -1,6 +1,5 @@
-import { BookOpen, Frame, MessageSquare, Sparkles } from "lucide-react";
+import { BookOpen, Database, FileCode, HardDrive } from "lucide-react";
 import { InfoCard } from "@/components/shared/InfoCard";
-import { McpTable } from "@/components/shared/McpTable";
 import { SectionTitle } from "@/components/shared/SectionTitle";
 import { SlideWrapper } from "@/components/shared/SlideWrapper";
 
@@ -9,75 +8,39 @@ export default function Slide04TriedMCP() {
     <SlideWrapper>
       <SectionTitle
         gradient="MCP yang"
-        plain="Pernah Aku Coba"
-        subtitle="Contoh server MCP yang sudah terasa berguna untuk workflow harian"
+        plain="Sering Aku Pakai"
+        subtitle="Empat MCP yang paling terasa manfaatnya untuk pekerjaan sehari-hari"
       />
-      <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)]">
-        <McpTable
-          rows={[
-            {
-              server: "Context7 MCP",
-              status: "community",
-              description: "Ambil dokumentasi library terbaru langsung ke sesi coding agar jawaban AI lebih sesuai versi aktual.",
-            },
-            {
-              server: "Figma MCP",
-              status: ["official", "warning"],
-              description: "Ambil konteks desain dari Figma: frame, komponen, token visual, spacing, dan detail UI.",
-            },
-            {
-              server: "GitHub MCP",
-              status: "official",
-              description: "Baca repository, PR, issue, branch, dan diff untuk review atau investigasi kode.",
-            },
-            {
-              server: "OpenAPI MCP",
-              status: "community",
-              description: "Baca kontrak API dari spesifikasi OpenAPI untuk memahami endpoint, schema, payload, dan response.",
-            },
-            {
-              server: "MongoDB MCP",
-              status: "community",
-              description: "Inspect collection, sample document, dan struktur data untuk membantu debugging atau analisis data.",
-            },
-            {
-              server: "Filesystem MCP",
-              status: "official",
-              description: "Baca dan tulis file lokal agar AI bisa memahami struktur proyek tanpa copy-paste manual.",
-            },
-          ]}
-          prompt="Contoh: Pakai Context7 untuk cek dokumentasi terbaru, baca kontrak OpenAPI, lalu cocokkan implementasi endpoint di GitHub dengan data contoh dari MongoDB."
-        />
-        <div className="min-w-0 space-y-4">
+      <div className="mx-auto max-w-5xl space-y-6">
+        <div className="grid gap-5 md:grid-cols-2">
           <InfoCard
-            icon={<Frame className="size-5" />}
-            title="Figma MCP"
-            description="Paling terasa saat perlu menjembatani desain dan implementasi. AI bisa membaca konteks visual sebelum menyarankan perubahan kode."
-          />
-          <InfoCard
-            icon={<BookOpen className="size-5" />}
+            icon={<BookOpen className="size-6" />}
             title="Context7 MCP"
-            description="Berguna saat memakai library yang sering berubah. AI mengambil dokumentasi aktual, bukan hanya mengandalkan memori model."
+            description="Ambil dokumentasi library terbaru agar AI tidak pakai info lama dari training data."
           />
-          <div className="deck-surface rounded-xl border border-[#234879] p-5">
-            <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-white">
-              <MessageSquare className="size-4 text-[#4BB8FA]" />
-              Prompt yang cocok
-            </div>
-            <p className="text-xs italic leading-relaxed text-[#C4E2F5]">
-              &quot;Gunakan Context7 untuk cek dokumentasi terbaru Next.js, lalu sesuaikan implementasi komponen ini
-              dengan pattern yang direkomendasikan.&quot;
-            </p>
-          </div>
-          <div className="rounded-xl border border-[#4BB8FA]/45 bg-[#0b1b33]/85 p-4">
-            <div className="flex items-center gap-2 text-xs font-semibold text-[#4BB8FA]">
-              <Sparkles className="size-4" />
-              Insight utama
-            </div>
-            <p className="mt-2 text-xs leading-relaxed text-[#C4E2F5]">
-              MCP paling terasa ketika AI tidak lagi menebak konteks, tapi langsung membaca sumber kerja yang relevan.
-            </p>
-          </div>
+          <InfoCard
+            icon={<HardDrive className="size-6" />}
+            title="Filesystem MCP"
+            description="AI bisa baca dan tulis file lokal, jadi tidak perlu copy-paste isi file ke chat lagi."
+          />
+          <InfoCard
+            icon={<FileCode className="size-6" />}
+            title="OpenAPI MCP"
+            description="Baca kontrak API dari spesifikasi OpenAPI untuk memahami endpoint, schema, dan response."
+          />
+          <InfoCard
+            icon={<Database className="size-6" />}
+            title="MongoDB MCP"
+            description="Inspect collection, sample document, dan struktur data untuk debugging atau analisis data."
+          />
+        </div>
+
+        <div className="deck-surface rounded-xl border border-[#234879] p-6">
+          <div className="mb-3 text-sm font-semibold text-white">Contoh pakai bareng:</div>
+          <p className="text-sm italic leading-relaxed text-[#C4E2F5]">
+            "Pakai Context7 buat cek dokumentasi library terbaru, baca kontrak OpenAPI, lalu cocokkan implementasi
+            endpoint di Filesystem dengan data contoh dari MongoDB."
+          </p>
         </div>
       </div>
     </SlideWrapper>
