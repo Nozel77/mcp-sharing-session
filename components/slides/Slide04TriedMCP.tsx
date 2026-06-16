@@ -7,9 +7,9 @@ export default function Slide04TriedMCP() {
   return (
     <SlideWrapper>
       <SectionTitle
-        gradient="MCP yang"
-        plain="Sering Aku Pakai"
-        subtitle="Empat MCP yang paling terasa manfaatnya untuk pekerjaan sehari-hari"
+        gradient="Contoh Server"
+        plain="MCP"
+        subtitle="Contoh empat MCP yang paling sering digunakan di Backend"
       />
       <div className="mx-auto max-w-5xl space-y-6">
         <div className="grid gap-5 md:grid-cols-2">

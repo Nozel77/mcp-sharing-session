@@ -4,7 +4,6 @@ import Slide01Agenda from "@/components/slides/Slide01Agenda";
 import Slide01WhatIsMCP from "@/components/slides/Slide01WhatIsMCP";
 import Slide02Architecture from "@/components/slides/Slide02Architecture";
 import Slide02WhyMCP from "@/components/slides/Slide02WhyMCP";
-import Slide03NotMCP from "@/components/slides/Slide03NotMCP";
 import Slide03Benefits from "@/components/slides/Slide03Benefits";
 import Slide04TriedMCP from "@/components/slides/Slide04TriedMCP";
 import Slide05McpSkills from "@/components/slides/Slide05McpSkills";
@@ -28,7 +27,6 @@ export const SLIDES: SlideConfig[] = [
   { id: "agenda", title: "Alur Sharing", section: "Opening", component: Slide01Agenda },
   { id: "what-is-mcp", title: "Apa Itu MCP?", section: "Konsep", component: Slide01WhatIsMCP },
   { id: "architecture", title: "Arsitektur MCP", section: "Konsep", component: Slide02Architecture },
-  { id: "not-mcp", title: "MCP Bukan Apa?", section: "Konsep", component: Slide03NotMCP },
   { id: "why-mcp", title: "Mengapa MCP Penting?", section: "Workflow", component: Slide02WhyMCP },
   { id: "benefits", title: "Manfaat MCP", section: "Workflow", component: Slide03Benefits },
   { id: "tried-mcp", title: "MCP yang Pernah Dicoba", section: "Workflow", component: Slide04TriedMCP },
