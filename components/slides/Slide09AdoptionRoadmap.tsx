@@ -54,7 +54,7 @@ export default function Slide09AdoptionRoadmap() {
       </div>
       <div className="mx-auto mt-7 max-w-4xl rounded-xl border border-[#4BB8FA]/40 bg-[#0b1b33]/85 px-5 py-4 text-center">
         <p className="text-base font-semibold text-white">
-          Target awal: workflow lebih cepat dan aman, bukan otomasi penuh.
+          Target awal: workflow lebih cepat dan aman, bukan otomatisasi penuh.
         </p>
       </div>
     </SlideWrapper>

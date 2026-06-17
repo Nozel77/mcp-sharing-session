@@ -51,7 +51,7 @@ export default function Slide01Agenda() {
         ))}
       </div>
       <p className="mx-auto mt-7 max-w-3xl text-center text-sm leading-6 text-[#8fb9d8]">
-        Target sesi ini: semua orang paham kapan MCP berguna, kapan berisiko, dan bagaimana mulai dari akses read-only.
+        Target sesi ini: semua orang paham kapan MCP berguna, kapan berisiko, dan bagaimana cara memulainya.
       </p>
     </SlideWrapper>
   );
